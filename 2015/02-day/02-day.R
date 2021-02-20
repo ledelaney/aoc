@@ -15,3 +15,24 @@
 # plus 1 square foot of slack, for a total of 43 square feet.
 # All numbers in the elves' list are in feet. 
 # How many total square feet of wrapping paper should they order?
+
+library(tidyverse)
+
+myinput <- read_csv("advent-of-code/2015/02-day/day2-input.csv", col_names = FALSE, 
+                    na = c("NA", " ", ""), trim_ws = TRUE, skip_empty_rows = TRUE) %>%
+  setNames(., "dims") %>%
+  separate("dims", into = c("l", "w", "h"), sep = "x", remove = TRUE) %>%
+  mutate(l = as.numeric(l),
+         w = as.numeric(w),
+         h = as.numeric(h))
+
+sides <- myinput %>%
+  transmute(s1 = 2 * l * w,
+         s2 = 2 * w * h,
+         s3 = 2 * h * l)
+
+bigs <- myinput %>%
+  rowwise() %>%
+  mutate(m = max (l, w, h))
+
+
